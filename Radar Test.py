@@ -1,3 +1,4 @@
+#Import Libraries
 import cv2
 import numpy as np
 
@@ -274,7 +275,7 @@ class RadarDisplay:
         self.screen.blit(toward_text, (panel_x + 40, legend_y + 40))
 
 class FilteredTarget:
-    #Wraps the Kalman Cartesian (X,Y) coordinates back into Polar data for the display
+    #Turn Cartesian Coordinates Back into Polar for use in the visualization
     def __init__(self, x, y, original_target):
         self.x = x
         self.y = y
@@ -324,7 +325,7 @@ def main():
                 
                 if target and target.distance > 0:
                     # Apply the user-defined distance bounds
-                    if 350 < target.distance < 1500:
+                    if 350 < target.distance < 6500:
                         x, y = t[i].update(target.x, target.y)
                         if t[i].is_confirmed:
                             # Package the filtered data for visualization
@@ -341,10 +342,10 @@ def main():
             pygame.display.flip()
           
             # --- RECORD FRAME ---
-            frame = pygame.surfarray.array3d(display.screen)
-            frame = np.transpose(frame, (1, 0, 2))   # rotate axes for OpenCV
-            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-            video.write(frame)
+            frame = pygame.surfarray.array3d(display.screen)    #Assign Frame
+            frame = np.transpose(frame, (1, 0, 2))   #Rotate axes for OpenCV
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)  #Match Colours 
+            video.write(frame)    #Record Frame
 
             clock.tick(30)
             
